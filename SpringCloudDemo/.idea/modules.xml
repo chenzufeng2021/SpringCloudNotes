@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/SpringCloudDemoParent/ConsulClient/ConsulClient.iml" filepath="$PROJECT_DIR$/SpringCloudDemoParent/ConsulClient/ConsulClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpringCloudDemoParent/ConsulClientOrders/ConsulClientOrders.iml" filepath="$PROJECT_DIR$/SpringCloudDemoParent/ConsulClientOrders/ConsulClientOrders.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpringCloudDemoParent/ConsulClientUsers/ConsulClientUsers.iml" filepath="$PROJECT_DIR$/SpringCloudDemoParent/ConsulClientUsers/ConsulClientUsers.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpringCloudDemoParent/EurekaClient/EurekaClient.iml" filepath="$PROJECT_DIR$/SpringCloudDemoParent/EurekaClient/EurekaClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpringCloudDemoParent/EurekaServer/EurekaServer.iml" filepath="$PROJECT_DIR$/SpringCloudDemoParent/EurekaServer/EurekaServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpringCloudDemoParent/EurekaServiceConsumer/EurekaServiceConsumer.iml" filepath="$PROJECT_DIR$/SpringCloudDemoParent/EurekaServiceConsumer/EurekaServiceConsumer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpringCloudDemoParent/EurekaServiceProvider/EurekaServiceProvider.iml" filepath="$PROJECT_DIR$/SpringCloudDemoParent/EurekaServiceProvider/EurekaServiceProvider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpringCloudDemoParent/Gateway/Gateway.iml" filepath="$PROJECT_DIR$/SpringCloudDemoParent/Gateway/Gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpringCloudDemoParent/HystrixClient/HystrixClient.iml" filepath="$PROJECT_DIR$/SpringCloudDemoParent/HystrixClient/HystrixClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpringCloudDemoParent/HystrixOpenFeign/HystrixOpenFeign.iml" filepath="$PROJECT_DIR$/SpringCloudDemoParent/HystrixOpenFeign/HystrixOpenFeign.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpringCloudDemoParent/OpenFeignCategory/OpenFeignCategory.iml" filepath="$PROJECT_DIR$/SpringCloudDemoParent/OpenFeignCategory/OpenFeignCategory.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpringCloudDemoParent/OpenFeignProduct/OpenFeignProduct.iml" filepath="$PROJECT_DIR$/SpringCloudDemoParent/OpenFeignProduct/OpenFeignProduct.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpringCloudDemoParent/SpringCloudDemoParent.iml" filepath="$PROJECT_DIR$/SpringCloudDemoParent/SpringCloudDemoParent.iml" />
+    </modules>
+  </component>
+</project>
