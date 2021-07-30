@@ -1,6 +1,6 @@
 # Introduction
 
-Spring Cloud 笔记
+Spring Cloud 笔记汇总
 
 # Git 命令
 
