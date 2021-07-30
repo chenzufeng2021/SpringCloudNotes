@@ -1183,6 +1183,7 @@ public class UsersController {
         /*
         // 1.使用restTemplate发起请求，调用商品服务
         RestTemplate restTemplate = new RestTemplate();
+        // <T> T getForObject(URI url, Class<T> responseType)
         String orderResult = restTemplate.getForObject("http://localhost:9999/FindOrders", String.class);
         log.info("调用订单服务成功，结果为{}", orderResult);
         log.info("=========================================");
