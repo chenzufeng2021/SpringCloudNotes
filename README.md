@@ -6,7 +6,7 @@ Spring Cloud 笔记汇总
 
 HTTPS：https://github.com/chenzufeng2021/SpringCloudNotes.git
 
-SSH：git@github.com:chenzufeng2021/SpringCloudNotes.git
+SSH：[git@github.com:chenzufeng2021/SpringCloudNotes.git]
 
 ## create a new repository on the command line
 
