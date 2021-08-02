@@ -360,7 +360,7 @@ public class OpenFeignProductsController {
 
 - 开启 Consul 服务注册中心：`consul agent -dev`
 
-- 启动 OpenFeignCategories、OpenFeignProducts8081、OpenFeignProducts8082（在IDEA中设置`Override parameters#server.port`）；
+- 启动 OpenFeignCategories、OpenFeignProducts8081、OpenFeignProducts8082（在IDEA中设置`Override parameters#server.port`）；
 
 - 登录 Consul：http://localhost:8500/，检查服务是否已经注册到 Consul。
 
@@ -790,7 +790,7 @@ public class OpenFeignCategoriesController {
 
 - 开启 Consul 服务注册中心：`consul agent -dev`
 
-- 启动 OpenFeignCategories、OpenFeignProducts8081、OpenFeignProducts8082（在IDEA中设置`Override parameters#server.port`）；
+- 启动 OpenFeignCategories、OpenFeignProducts8081、OpenFeignProducts8082（在IDEA中设置`Override parameters#server.port`）；
 
 - 登录 Consul：http://localhost:8500/，检查服务是否已经注册到 Consul。
 
@@ -970,7 +970,7 @@ public class OpenFeignProductsController {
 
 - 开启 Consul 服务注册中心：`consul agent -dev`
 
-- 启动 OpenFeignCategories、OpenFeignProducts8081、OpenFeignProducts8082（在IDEA中设置`Override parameters#server.port`）；
+- 启动 OpenFeignCategories、OpenFeignProducts8081、OpenFeignProducts8082（在IDEA中设置`Override parameters#server.port`）；
 
 - 登录 Consul：http://localhost:8500/，检查服务是否已经注册到 Consul。
 
@@ -1127,7 +1127,7 @@ public class OpenFeignProductsController {
 
 - 开启 Consul 服务注册中心：`consul agent -dev`
 
-- 启动 OpenFeignCategories、OpenFeignProducts8081、OpenFeignProducts8082（在IDEA中设置`Override parameters#server.port`）；
+- 启动 OpenFeignCategories、OpenFeignProducts8081、OpenFeignProducts8082（在IDEA中设置`Override parameters#server.port`）；
 
 - 登录 Consul：http://localhost:8500/，检查服务是否已经注册到 Consul。
 
@@ -1322,7 +1322,7 @@ public class OpenFeignProductsController {
 
 - 开启 Consul 服务注册中心：`consul agent -dev`
 
-- 启动 OpenFeignCategories、OpenFeignProducts8081、OpenFeignProducts8082（在IDEA中设置`Override parameters#server.port`）；
+- 启动 OpenFeignCategories、OpenFeignProducts8081、OpenFeignProducts8082（在IDEA中设置`Override parameters#server.port`）；
 
 - 登录 Consul：http://localhost:8500/，检查服务是否已经注册到 Consul。
 
@@ -1507,7 +1507,7 @@ public class OpenFeignProductsController {
 
 - 开启 Consul 服务注册中心：`consul agent -dev`
 
-- 启动 OpenFeignCategories、OpenFeignProducts8081、OpenFeignProducts8082（在IDEA中设置`Override parameters#server.port`）；
+- 启动 OpenFeignCategories、OpenFeignProducts8081、OpenFeignProducts8082（在IDEA中设置`Override parameters#server.port`）；
 
 - 登录 Consul：http://localhost:8500/，检查服务是否已经注册到 Consul。
 
@@ -1683,7 +1683,7 @@ public class OpenFeignProductsController {
 
 - 开启 Consul 服务注册中心：`consul agent -dev`
 
-- 启动 OpenFeignCategories、OpenFeignProducts8081、OpenFeignProducts8082（在IDEA中设置`Override parameters#server.port`）；
+- 启动 OpenFeignCategories、OpenFeignProducts8081、OpenFeignProducts8082（在IDEA中设置`Override parameters#server.port`）；
 
 - 登录 Consul：http://localhost:8500/，检查服务是否已经注册到 Consul。
 
@@ -1846,7 +1846,7 @@ public class OpenFeignProductsController {
 
 - 开启 Consul 服务注册中心：`consul agent -dev`
 
-- 启动 OpenFeignCategories、OpenFeignProducts8081、OpenFeignProducts8082（在IDEA中设置`Override parameters#server.port`）；
+- 启动 OpenFeignCategories、OpenFeignProducts8081、OpenFeignProducts8082（在IDEA中设置`Override parameters#server.port`）；
 
 - 登录 Consul：http://localhost:8500/，检查服务是否已经注册到 Consul。
 
@@ -2065,7 +2065,7 @@ public class OpenFeignProductsController {
 
 - 开启 Consul 服务注册中心：`consul agent -dev`
 
-- 启动 OpenFeignCategories、OpenFeignProducts8081、OpenFeignProducts8082（在IDEA中设置`Override parameters#server.port`）；
+- 启动 OpenFeignCategories、OpenFeignProducts8081、OpenFeignProducts8082（在IDEA中设置`Override parameters#server.port`）；
 
 - 登录 Consul：http://localhost:8500/，检查服务是否已经注册到 Consul。
 
@@ -2085,7 +2085,7 @@ public class OpenFeignProductsController {
   类别服务调用商品服务中getProductMap方法：{"data":[{"id":1,"name":"chen","salary":20000.0,"birth":"2021-08-01T11:06:22.201+0000"},{"id":2,"name":"zufeng","salary":30000.0,"birth":"2021-08-01T11:06:22.201+0000"}],"totalCount":2}
   ```
 
-# OpenFeign 实例（新增）
+# OpenFeign 实例
 
 ## 创建 FeignService 服务调用者
 
