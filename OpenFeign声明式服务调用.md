@@ -2085,6 +2085,237 @@ public class OpenFeignProductsController {
   类别服务调用商品服务中getProductMap方法：{"data":[{"id":1,"name":"chen","salary":20000.0,"birth":"2021-08-01T11:06:22.201+0000"},{"id":2,"name":"zufeng","salary":30000.0,"birth":"2021-08-01T11:06:22.201+0000"}],"totalCount":2}
   ```
 
+# OpenFeign 实例（新增）
+
+## 创建 FeignService 服务调用者
+
+### 创建项目、添加依赖
+
+```xml
+<dependencies>
+    <!--SpringBootWeb-->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <!--引入Eureka依赖-->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+    </dependency>
+
+    <!--OpenFeign 依赖-->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-openfeign</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+    </dependency>
+</dependencies>
+```
+
+### 添加配置文件、创建入口类
+
+配置文件：
+
+```yaml
+server:
+  port: 8080
+spring:
+  application:
+    name: FeignService
+eureka:
+  client:
+    service-url:
+      defalutZone: http://localhost:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
+```
+
+入口类：
+
+```java
+package com.example;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+
+@SpringBootApplication
+@EnableEurekaClient
+@EnableFeignClients
+public class FeignServiceApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(FeignServiceApplication.class, args);
+    }
+}
+```
+
+### domain
+
+#### User
+
+```java
+package com.example.domain;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class User {
+    private Long id;
+    private String userName;
+    private String password;
+}
+```
+
+#### CommonResult
+
+```java
+package com.example.domain;
+
+public class CommonResult<T> {
+    private T data;
+    private String message;
+    private Integer code;
+
+    public CommonResult() {}
+
+    public CommonResult(T data, String message, Integer code) {
+        this.data = data;
+        this.message = message;
+        this.code = code;
+    }
+
+    public CommonResult(T data) {
+        this(data, "操作成功", 200);
+    }
+
+    public CommonResult(String message, Integer code) {
+        this(null, message, code);
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+}
+```
+
+
+
+### RibbonService 接口
+
+添加 RibbonService 接口完成对[RibbonService](负载均衡的服务调用.md)服务的接口绑定：
+
+```java
+package com.example.service;
+
+import com.example.domain.CommonResult;
+import com.example.domain.User;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.*;
+
+// 调用RibbonService项目中UserController提供的服务
+@FeignClient(value = "RibbonService")
+public interface RibbonService {
+    @PostMapping("/Create")
+    CommonResult create(@RequestBody User user);
+
+    @GetMapping("/{id}")
+    CommonResult<User> getUser(@PathVariable Long id);
+
+    @GetMapping("/GetByUserName")
+    CommonResult<User> getByUserName(@RequestParam String userName);
+
+    @PostMapping("/Update")
+    CommonResult update(@RequestBody User user);
+
+    @PostMapping("/Delete/{id}")
+    CommonResult delete(@PathVariable Long id);
+}
+```
+
+### FeignServiceController
+
+添加 FeignServiceController 调用 RibbonService 实现服务调用：
+
+```java
+package com.example.controller;
+
+import com.example.domain.CommonResult;
+import com.example.domain.User;
+import com.example.service.RibbonService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+public class FeignServiceController {
+    @Autowired
+    private RibbonService ribbonService;
+
+    @PostMapping("/Create")
+    CommonResult create(@RequestBody User user) {
+        return ribbonService.create(user);
+    }
+
+    @GetMapping("/{id}")
+    CommonResult<User> getUser(@PathVariable Long id) {
+        return ribbonService.getUser(id);
+    }
+
+    @GetMapping("/GetByUserName")
+    CommonResult<User> getByUserName(@RequestParam String userName) {
+        return ribbonService.getByUserName(userName);
+    }
+
+    @PostMapping("/Update")
+    CommonResult update(@RequestBody User user) {
+        return ribbonService.update(user);
+    }
+
+    @PostMapping("/Delete/{id}")
+    CommonResult delete(@PathVariable Long id) {
+        return ribbonService.delete(id);
+    }
+}
+```
+
+## 负载均衡功能演示
+
+启动[EurekaServerApplication1 :8761——服务注册中心](服务注册中心.md)，两个[RibbonServiceApplication8080、RibbonServiceApplication8081](负载均衡的服务调用.md)，[FeignServiceApplication :8082]()服务，多次调用http://localhost:8082/1进行测试，可以发现运行在 8201 和 8202 的 RibbonService 服务交替打印：
+
+```markdown
+根据id获取用户信息，用户名称为：chen
+```
+
 
 
 # Feign 超时设置
