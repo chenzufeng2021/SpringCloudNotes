@@ -376,7 +376,7 @@ public class UserController {
 
 - 启动 oauth2-server 服务；
 
-- 在浏览器访问该地址进行登录授权：[http://localhost:8080/oauth/authorize?response_type=code&client_id=admin&redirect_uri=http://www.baidu.com&scope=all&state=normal](http://localhost:8080/oauth/authorize?response_type=code&client_id=admin&redirect_uri=http://www.baidu.com&scope=all&state=normal)（链接跳转至http://localhost:8080/login）
+- 在浏览器访问该地址进行登录授权：[http://localhost:8080/oauth/authorize?response_type=code&client_id=admin&redirect_uri=http://www.baidu.com&scope=all&state=normal]()（链接跳转至[http://localhost:8080/login]()）
 
 - 输入账号密码进行登录操作
 

@@ -2085,9 +2085,13 @@ public class OpenFeignProductsController {
   类别服务调用商品服务中getProductMap方法：{"data":[{"id":1,"name":"chen","salary":20000.0,"birth":"2021-08-01T11:06:22.201+0000"},{"id":2,"name":"zufeng","salary":30000.0,"birth":"2021-08-01T11:06:22.201+0000"}],"totalCount":2}
   ```
 
-# OpenFeign 实例
+# 基于 Ribbon 和 Hystrix 的声明式服务调用
 
-## 创建 FeignService 服务调用者
+## 创建 feign-service 服务调用者
+
+项目地址：
+
+D:\Learning\SpringCloud\SpringCloudCode\SpringCloudMall\MallParent\feign-service
 
 ### 创建项目、添加依赖
 
@@ -2123,8 +2127,9 @@ public class OpenFeignProductsController {
 配置文件：
 
 ```yaml
+# 1. 配置基本信息
 server:
-  port: 8080
+  port: 8082
 spring:
   application:
     name: FeignService
@@ -2136,7 +2141,8 @@ eureka:
     register-with-eureka: true
 ```
 
-入口类：
+在启动类上添加 `@EnableFeignClients` 注解来==启用 Feign 的客户端功能==
+：
 
 ```java
 package com.example;
@@ -2156,7 +2162,7 @@ public class FeignServiceApplication {
 }
 ```
 
-### domain
+### 实体类
 
 #### User
 
@@ -2231,90 +2237,292 @@ public class CommonResult<T> {
 
 
 
-### RibbonService 接口
+### 添加接口
 
-添加 RibbonService 接口完成对[RibbonService](负载均衡的服务调用.md)服务的接口绑定：
+添加 UserService 接口完成对 user-service 服务的接口绑定。
+
+通过`@FeignClient`注解实现了一个 Feign 客户端，其中的 value 为 user-service ，表示这是对 user-service 服务的接口调用客户端。
+
+只需将 user-service 中的  UserController 改为接口放在这里，保留原来的SpringMVC注释即可。
 
 ```java
 package com.example.service;
 
-import com.example.domain.CommonResult;
-import com.example.domain.User;
+import com.example.entity.CommonResult;
+import com.example.entity.User;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-// 调用RibbonService项目中UserController提供的服务
-@FeignClient(value = "RibbonService")
-public interface RibbonService {
-    @PostMapping("/Create")
+/**
+ * @author chenzufeng
+ * @date 2021/8/8
+ * @usage UserService
+ */
+@FeignClient(value = "user-service")
+public interface UserService {
+    @PostMapping("/User/Create")
     CommonResult create(@RequestBody User user);
 
-    @GetMapping("/{id}")
+    @GetMapping("/User/{id}")
     CommonResult<User> getUser(@PathVariable Long id);
 
-    @GetMapping("/GetByUserName")
+    @GetMapping("/User/GetByUserName")
     CommonResult<User> getByUserName(@RequestParam String userName);
 
-    @PostMapping("/Update")
+    @PostMapping("/User/Update")
     CommonResult update(@RequestBody User user);
 
-    @PostMapping("/Delete/{id}")
+    @PostMapping("/User/Delete/{id}")
     CommonResult delete(@PathVariable Long id);
 }
 ```
 
-### FeignServiceController
+### 添加 UserFeignController
 
-添加 FeignServiceController 调用 RibbonService 实现服务调用：
+添加 UserFeignController 调用 UserService，实现服务调用：
 
 ```java
 package com.example.controller;
 
-import com.example.domain.CommonResult;
-import com.example.domain.User;
-import com.example.service.RibbonService;
+import com.example.entity.CommonResult;
+import com.example.entity.User;
+import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * @author chenzufeng
+ * @date 2021/8/8
+ * @usage UserFeignController
+ */
 @RestController
-public class FeignServiceController {
+@RequestMapping("/User")
+public class UserFeignController {
     @Autowired
-    private RibbonService ribbonService;
+    private UserService userService;
 
     @PostMapping("/Create")
-    CommonResult create(@RequestBody User user) {
-        return ribbonService.create(user);
+    public CommonResult create(@RequestBody User user) {
+        return userService.create(user);
     }
 
     @GetMapping("/{id}")
-    CommonResult<User> getUser(@PathVariable Long id) {
-        return ribbonService.getUser(id);
+    public CommonResult<User> getUser(@PathVariable Long id) {
+        return userService.getUser(id);
     }
 
     @GetMapping("/GetByUserName")
-    CommonResult<User> getByUserName(@RequestParam String userName) {
-        return ribbonService.getByUserName(userName);
+    public CommonResult<User> getByUserName(@RequestParam String userName) {
+        return userService.getByUserName(userName);
     }
 
     @PostMapping("/Update")
-    CommonResult update(@RequestBody User user) {
-        return ribbonService.update(user);
+    public CommonResult update(@RequestBody User user) {
+        return userService.update(user);
     }
 
     @PostMapping("/Delete/{id}")
-    CommonResult delete(@PathVariable Long id) {
-        return ribbonService.delete(id);
+    public CommonResult delete(@PathVariable Long id) {
+        return userService.delete(id);
     }
 }
 ```
 
 ## 负载均衡功能演示
 
-启动[EurekaServerApplication1 :8761——服务注册中心](服务注册中心.md)，两个[RibbonServiceApplication8080、RibbonServiceApplication8081](负载均衡的服务调用.md)，[FeignServiceApplication :8082]()服务，多次调用http://localhost:8082/1进行测试，可以发现运行在 8201 和 8202 的 RibbonService 服务交替打印：
+- 启动 [eureka-service](服务注册中心.md)，两个 [user-service(基于Ribbon的服务调用-实例二)](负载均衡的服务调用.md)，feign-service 服务，启动后注册中心显示如下：
 
-```markdown
-根据id获取用户信息，用户名称为：chen
+  ![FeignService](SpringCloudPictures/FeignService.png)
+
+- 多次调用[http://localhost:8082/User/1]()进行测试，可以发现运行在 8201 和 8202 的 user-service 服务交替打印如下信息：
+
+  ```markdown
+  [nio-8080-exec-1] com.example.controller.UserController    : 根据id获取用户信息，用户名称为：chen
+  
+  [nio-8081-exec-1] com.example.controller.UserController    : 根据id获取用户信息，用户名称为：chen
+  
+  [nio-8080-exec-2] com.example.controller.UserController    : 根据id获取用户信息，用户名称为：chen
+  ```
+
+  
+
+## Feign 中的服务降级
+
+Feign 中的服务降级使用起来非常方便，只需要==为 Feign 客户端定义的接口添加一个服务降级处理的实现类==即可。
+
+### 在配置中开启 Hystrix 功能
+
+```yaml
+feign:
+  hystrix:
+    enabled: true
 ```
+
+具体的：
+
+```yaml
+# 1. 配置基本信息
+server:
+  port: 8082
+
+spring:
+  application:
+    name: feign-service
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+
+# 2. 在配置中开启 Hystrix 功能
+feign:
+  hystrix:
+    enabled: true
+```
+
+
+
+### 添加服务降级实现类 UserFallbackService
+
+它实现了 UserService 接口，并且对接口中的每个实现方法进行了服务降级逻辑的实现：
+
+```java
+package com.example.service;
+
+import com.example.entity.CommonResult;
+import com.example.entity.User;
+import org.springframework.stereotype.Component;
+
+/**
+ * @author chenzufeng
+ * @date 2021/8/8
+ * @usage UserFallbackService
+ */
+@Component
+public class UserFallbackService implements UserService {
+    @Override
+    public CommonResult create(User user) {
+        User defaultUser = new User(-1L, "defaultUser", "123");
+        return new CommonResult<>(defaultUser);
+    }
+
+    @Override
+    public CommonResult<User> getUser(Long id) {
+        User defaultUser = new User(-1L, "defaultUser", "123");
+        return new CommonResult<>(defaultUser);
+    }
+
+    @Override
+    public CommonResult<User> getByUserName(String userName) {
+        User defaultUser = new User(-1L, "defaultUser", "123");
+        return new CommonResult<>(defaultUser);
+    }
+
+    @Override
+    public CommonResult update(User user) {
+        return new CommonResult("调用失败，服务被降级！", 500);
+    }
+
+    @Override
+    public CommonResult delete(Long id) {
+        return new CommonResult("调用失败，服务被降级！", 500);
+    }
+}
+```
+
+### 修改 UserService 接口
+
+修改 @FeignClient 注解中的参数，设置 fallback（设置服务降级处理类）为`UserFallbackService.class`：
+
+```java
+@FeignClient(value = "user-service", fallback = UserFallbackService.class)
+```
+
+具体的：
+
+```java
+package com.example.service;
+
+import com.example.entity.CommonResult;
+import com.example.entity.User;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.*;
+
+/**
+ * @author chenzufeng
+ * @date 2021/8/8
+ * @usage UserService 通过`@FeignClient`注解实现了一个 Feign 客户端，
+ * 其中的 value 为 user-service ，表示这是对 user-service 服务的接口调用客户端
+ *
+ * @FeignClient(value = "user-service")
+ * 设置服务降级处理类为 UserFallbackService
+ */
+@FeignClient(value = "user-service", fallback = UserFallbackService.class)
+public interface UserService {
+    @PostMapping("/User/Create")
+    CommonResult create(@RequestBody User user);
+
+    @GetMapping("/User/{id}")
+    CommonResult<User> getUser(@PathVariable Long id);
+
+    @GetMapping("/User/GetByUserName")
+    CommonResult<User> getByUserName(@RequestParam String userName);
+
+    @PostMapping("/User/Update")
+    CommonResult update(@RequestBody User user);
+
+    @PostMapping("/User/Delete/{id}")
+    CommonResult delete(@PathVariable Long id);
+}
+```
+
+
+
+### 服务降级功能演示
+
+- 启动 [eureka-service](服务注册中心.md)，两个 [user-service(基于Ribbon的服务调用-实例二)](负载均衡的服务调用.md)，feign-service 服务；
+
+- 多次调用[http://localhost:8082/User/1]()进行测试
+
+  - 运行在 8201 和 8202 的 user-service 服务交替打印
+
+    ```markdown
+    根据id获取用户信息，用户名称为：chen
+    ```
+
+  - 返回信息：
+
+    ```json
+    {
+        "data": {
+            "id": 1,
+            "userName": "chen",
+            "password": "123"
+        },
+        "message": "操作成功",
+        "code": 200
+    }
+    ```
+
+- 关闭两个 user-service 服务，重新启动 feign-service；
+
+- 调用[http://localhost:8082/User/1]()进行测试，可以发现==返回了服务降级信息==：
+
+  ```json
+  {
+      "data": {
+          "id": -1,
+          "userName": "defaultUser",
+          "password": "123"
+      },
+      "message": "操作成功",
+      "code": 200
+  }
+  ```
+
+  
 
 
 
@@ -2340,14 +2548,14 @@ feign.client.config.default.readTimeout=5000
 
 # OpenFeign 调用详细日志展示
 
-在服务调用时，需要详细展示 Feign 的日志。默认 Feign 在调用是并不是最详细日志输出，因此在调试程序时应该开启 Feign 的详细日志展示。
+在服务调用时，需要详细展示 Feign 的日志。默认 Feign 在调用是并不是最详细日志输出，因此在调试程序时应该开启 Feign 的详细日志展示，从而了解 Feign 中 HTTP 请求的细节。
 
 Feign 对日志的处理非常灵活，可为每个 Feign 客户端指定日志记录策略。每个客户端都会创建一个 logger，默认情况下 logger 的名称是 Feign 的全限定名。需要注意的是，Feign 日志的打印只会对 ==DEBUG 级别==做出响应。
 
 可以为 Feign 客户端配置各自的 `logger.lever` 对象，告诉 Feign 记录哪些日志。logger.lever 有以下的几种值：
 
 - `NONE`：不记录任何日志；
-- `BASIC`：仅仅记录请求方法、url、响应状态代码及执行时间；
+- `BASIC`：仅仅记录请求方法、URL、响应状态代码及执行时间；
 - `HEADERS`：在记录 Basic 级别的基础上，记录请求和响应的header；
 - `FULL`：记录请求和响应的header、body和元数据。
 
@@ -2360,5 +2568,88 @@ feign.client.config.PRODUCTS.loggerLevel=full
 feign.client.config.default.loggerLevel=full   
 # 指定 Feign 调用客户端对象所在包，必须是 debug 级别
 logging.level.com.example.feignClients=debug     
+```
+
+## 创建Java 配置开启
+
+注意添加`@Configuration`：
+
+```java
+package com.example.config;
+
+import feign.Logger;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+/**
+ * @author chenzufeng
+ * @date 2021/8/8
+ * @usage FeignConfig 使 Feign打印最详细的HTTP请求日志信息
+ */
+@Configuration
+public class FeignConfig {
+    @Bean
+    // feign.Logger
+    Logger.Level feignLoggerLevel() {
+        return Logger.Level.FULL;
+    }
+}
+```
+
+
+
+## 添加 yml 配置信息
+
+在 application.yml 中==配置需要开启日志的 Feign 客户端==：配置 UserService 的日志级别为 debug。
+
+```yaml
+# 1. 配置基本信息
+server:
+  port: 8082
+
+spring:
+  application:
+    name: feign-service
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+
+# 2. 在配置中开启 Hystrix 功能
+feign:
+  hystrix:
+    enabled: true
+
+# 3. 配置需要开启日志的Feign客户端
+logging:
+  level:
+    com.example.service.UserService: debug
+```
+
+
+
+## 查看日志
+
+调用[http://localhost:8082/User/1]()进行测试，开启后：
+
+```markdown
+2021-08-08 11:39:02.025  INFO 17572 --- [nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        :  Completed initialization in 16 ms
+2021-08-08 11:39:02.244 DEBUG 17572 --- [-user-service-1] com.example.service.UserService          : [UserService#getUser] ---> GET http://user-service/User/1 HTTP/1.1
+2021-08-08 11:39:02.244 DEBUG 17572 --- [-user-service-1] com.example.service.UserService          : [UserService#getUser] ---> END HTTP (0-byte body)
+// 。。。。。。。
+2021-08-08 11:39:02.479 DEBUG 17572 --- [-user-service-1] com.example.service.UserService          : [UserService#getUser] <--- HTTP/1.1 200 (236ms)
+2021-08-08 11:39:02.479 DEBUG 17572 --- [-user-service-1] com.example.service.UserService          : [UserService#getUser] connection: keep-alive
+2021-08-08 11:39:02.479 DEBUG 17572 --- [-user-service-1] com.example.service.UserService          : [UserService#getUser] content-type: application/json
+2021-08-08 11:39:02.479 DEBUG 17572 --- [-user-service-1] com.example.service.UserService          : [UserService#getUser] date: Sun, 08 Aug 2021 03:39:02 GMT
+2021-08-08 11:39:02.479 DEBUG 17572 --- [-user-service-1] com.example.service.UserService          : [UserService#getUser] keep-alive: timeout=60
+2021-08-08 11:39:02.479 DEBUG 17572 --- [-user-service-1] com.example.service.UserService          : [UserService#getUser] transfer-encoding: chunked
+2021-08-08 11:39:02.479 DEBUG 17572 --- [-user-service-1] com.example.service.UserService          : [UserService#getUser] 
+2021-08-08 11:39:02.479 DEBUG 17572 --- [-user-service-1] com.example.service.UserService          : [UserService#getUser] {"data":{"id":1,"userName":"chen","password":"123"},"message":"操作成功","code":200}
+2021-08-08 11:39:02.479 DEBUG 17572 --- [-user-service-1] com.example.service.UserService          : [UserService#getUser] <--- END HTTP (88-byte body)
+
+2021-08-08 11:39:03.421  INFO 17572 --- [erListUpdater-0] c.netflix.config.ChainedDynamicProperty  : Flipping property: user-service.ribbon.ActiveConnectionsLimit to use NEXT property: niws.loadbalancer.availabilityFilteringRule.activeConnectionsLimit = 2147483647
 ```
 

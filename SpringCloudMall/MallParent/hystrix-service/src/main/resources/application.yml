@@ -1,0 +1,17 @@
+# 1. 配置端口、注册中心地址及 user-service 的调用路径
+server:
+  port: 8081
+
+spring:
+  application:
+    name: hystrix-service
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+service-url:
+  user-service: http://user-service

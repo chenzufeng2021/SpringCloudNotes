@@ -1,3 +1,7 @@
+---
+typora-copy-images-to: SpringCloudPictures
+---
+
 # Nacos 简介
 
 Nacos 致力于帮助用户==发现==、==配置==和==管理==微服务。Nacos 提供了一组简单易用的特性集，帮助用户快速实现动态服务发现、服务配置、服务元数据及流量管理。
@@ -26,18 +30,20 @@ Nacos 具有如下特性:
 
 - 下载：[https://github.com/alibaba/nacos/releases/tag/1.3.0](https://github.com/alibaba/nacos/releases/tag/1.3.0)
 
-- 配置环境变量：`JAVA_HOME:......`
+- 配置环境变量
 
     ```markdown
     D:\Winsoftware\Nacos1.3\bin>startup.cmd -m standalone
     Please set the JAVA_HOME variable in your environment, We need java(x64)! jdk8 or later is better!
     ```
 
+    <img src="SpringCloudPictures/设置Java环境变量.png" alt="设置Java环境变量" style="zoom:45%;" />
+
     
 
 - cmd 切换到 bin 目录下，启动 Nacos：执行`startup.cmd -m standalone`或者双击`startup.cmd`运行文件
 
-- 访问 Nacos 的 web 服务管理界面：`http://localhost:8848/nacos`，用户名和密码都是 nacos 。
+- 访问 Nacos 的 web 服务管理界面：`http://localhost:8848/nacos`，用户名和密码都是 `nacos` 。
 
 
 
@@ -47,7 +53,7 @@ Nacos 具有如下特性:
 
 - 创建 Empty Project；
 
-- 创建 Maven 项目：
+- 创建 Maven 项目：`File`$$\rightarrow$$`New`$$\rightarrow$$`Module`
 
     ```xml
     <!--parent-->
@@ -393,7 +399,7 @@ public class UserController {
 
 
 
-## 创建 nacos-ribbon-service 模块
+## 创建 nacos-ribbon-service 模块（待更新）
 
 
 

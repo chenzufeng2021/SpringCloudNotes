@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/MallParent/MallParent.iml" filepath="$PROJECT_DIR$/MallParent/MallParent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MallParent/eureka-client/eureka-client.iml" filepath="$PROJECT_DIR$/MallParent/eureka-client/eureka-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MallParent/eureka-security-server/eureka-security-server.iml" filepath="$PROJECT_DIR$/MallParent/eureka-security-server/eureka-security-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MallParent/eureka-server/eureka-server.iml" filepath="$PROJECT_DIR$/MallParent/eureka-server/eureka-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MallParent/feign-service/feign-service.iml" filepath="$PROJECT_DIR$/MallParent/feign-service/feign-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MallParent/hystrix-service/hystrix-service.iml" filepath="$PROJECT_DIR$/MallParent/hystrix-service/hystrix-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MallParent/ribbon-service/ribbon-service.iml" filepath="$PROJECT_DIR$/MallParent/ribbon-service/ribbon-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MallParent/user-service/user-service.iml" filepath="$PROJECT_DIR$/MallParent/user-service/user-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MallParent/zuul-proxy/zuul-proxy.iml" filepath="$PROJECT_DIR$/MallParent/zuul-proxy/zuul-proxy.iml" />
+    </modules>
+  </component>
+</project>
